@@ -42,13 +42,15 @@ Cette approche est celle qui a produit les meilleures performances.
 Le modèle intégrant un seuil minimal de variance montre une progression stable du score moyen au fil des itérations, jusqu’à atteindre un plateau élevé.  
 Cette dynamique reflète un bon équilibre entre exploration et exploitation sur l’ensemble du benchmark.
 
-*(Insérer ici la première image de performance globale)*
+<img width="716" height="537" alt="672b267a-a19f-478f-90d0-ca8b21b6c429" src="https://github.com/user-attachments/assets/6e3f9c0f-2cc4-4d4d-b136-df922b5bb4ef" />
+
 
 ### Performance par tâche  
 L’évolution sur la tâche « gina » met en évidence une amélioration rapide durant les premières itérations, suivie d’un affinement progressif.  
 Ce comportement indique que l’optimiseur identifie rapidement des zones prometteuses avant de stabiliser la recherche autour des meilleures régions.
 
-*(Insérer ici la seconde image de performance par tâche)*
+<img width="713" height="533" alt="3b2b3fc1-cd30-4aa0-a34c-b934060af6ac" src="https://github.com/user-attachments/assets/6e155b14-adaf-4f37-a9a3-3a0bdc0ec6d0" />
+
 
 ---
 
