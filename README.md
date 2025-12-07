@@ -1,69 +1,64 @@
-# Optimisation Black-Box avec Processus Gaussiens  
-Projet réalisé dans le cadre du NeurIPS 2020 BBO Post-Challenge
+# Black-Box Optimization with Gaussian Processes  
+Project carried out as part of the NeurIPS 2020 BBO Post-Challenge
 
-## Présentation générale
-Ce projet s’inscrit dans le benchmark NeurIPS 2020 Black-Box Optimization Challenge, consacré à l’évaluation d’algorithmes d’optimisation en boîte noire appliqués à des tâches réelles de sélection d’hyperparamètres.  
-L’optimiseur doit interroger une fonction dont la structure interne est inconnue et proposer progressivement de nouveaux hyperparamètres à tester. La plateforme appelle la fonction `suggest(...)` pour obtenir un point à évaluer, puis `observe(hp, R)` pour mettre à jour l’état interne de l’optimiseur avec le score obtenu.
+## Overview
+This project is based on the NeurIPS 2020 Black-Box Optimization Challenge, which focuses on evaluating black-box optimization algorithms applied to real-world hyperparameter search tasks.  
+The optimizer must interact with a function whose internal structure is unknown and progressively propose new hyperparameters to evaluate. The platform calls the `suggest(...)` method to obtain a candidate point and then invokes `observe(hp, R)` to update the optimizer with the resulting score.
 
-Dans ce cadre, plusieurs variantes d’optimiseurs basés sur la régression par processus gaussiens (Gaussian Process Regression, GPR) ont été conçues et évaluées afin d’analyser l’impact de différentes stratégies d’acquisition et de gestion de l’incertitude.
+Several variants of Gaussian Process Regression (GPR)–based optimizers were implemented and evaluated to study the impact of different acquisition strategies and uncertainty handling methods.
 
 ---
 
-## Méthodes développées
+## Developed Methods
 
 ### 1. Gaussian Process Regression (GPR) – Baseline  
-**Submission ID : 893732 — Score : 91.28**
+**Submission ID: 893732 — Score: 91.28**
 
-Cette version repose sur un modèle de processus gaussiens associé à une fonction d’acquisition Expected Improvement.  
-Les hyperparamètres sont transformés en fonction de leur nature (catégoriels, booléens, entiers, réels avec éventuelle échelle logarithmique).  
-L’optimiseur mène une phase d’exploration initiale avant de s’orienter progressivement vers les régions les plus prometteuses, sur la base des observations accumulées.
+This baseline relies on a Gaussian Process model combined with an Expected Improvement acquisition function.  
+Hyperparameters are transformed depending on their type (categorical, boolean, integer, real, optionally log-scaled).  
+The optimizer begins with an exploration phase before progressively focusing on the most promising regions based on accumulated observations.
 
-### 2. GPR avec exploration adaptative  
-**Submission ID : 893739 — Score : 83.24**
+### 2. GPR with Adaptive Exploration  
+**Submission ID: 893739 — Score: 83.24**
 
-Cette variante modifie l’intensité de l’exploration en fonction de la variance des observations récentes.  
-Une variance faible est interprétée comme un signe de stagnation et entraîne une augmentation de l’exploration.  
-Une variance plus élevée conduit au contraire à la réduire pour concentrer la recherche sur les zones les mieux notées.  
-Dans le cadre du challenge, cette stratégie n’a pas amélioré les résultats et a eu tendance à générer une exploration trop importante.
+This variant adjusts the exploration intensity according to the variance of recent observations.  
+Low variance is interpreted as a sign of stagnation and increases exploration, while higher variance reduces it to concentrate on promising areas.  
+In this challenge setting, this strategy did not improve performance and tended to cause excessive exploration.
 
-### 3. GPR avec seuil minimal de variance  
-**Submission ID : 893749 — Score : 92.65**
+### 3. GPR with Minimum Variance Threshold  
+**Submission ID: 893749 — Score: 92.65**
 
-Cette version introduit un seuil minimal de variance dans le calcul de la fonction d’acquisition.  
-Lorsque la variance prédite devient extrêmement faible, la GPR peut se montrer trop confiante et réduire exagérément son exploration.  
-En imposant un seuil plancher, le modèle reste plus prudent, continue d’explorer quand c’est nécessaire et évite de se figer prématurément.  
-Cette approche est celle qui a produit les meilleures performances.
+This approach introduces a minimum variance threshold in the acquisition computation.  
+When the predicted variance becomes extremely small, the GPR model may become overly confident and suppress exploration too strongly.  
+By enforcing a lower bound, the optimizer remains more cautious, continues to explore when needed, and avoids premature convergence.  
+This method achieved the best performance among the implemented variants.
 
 ---
 
-## Résultats
+## Results
 
-### Performance globale  
-Le modèle intégrant un seuil minimal de variance montre une progression stable du score moyen au fil des itérations, jusqu’à atteindre un plateau élevé.  
-Cette dynamique reflète un bon équilibre entre exploration et exploitation sur l’ensemble du benchmark.
+### Overall Performance  
+The model incorporating a minimum variance threshold shows a steady improvement of the mean score across iterations until it reaches a stable, high-performance plateau.  
+This trend reflects a well-balanced trade-off between exploration and exploitation across the benchmark.
 
-<img width="716" height="537" alt="672b267a-a19f-478f-90d0-ca8b21b6c429" src="https://github.com/user-attachments/assets/6e3f9c0f-2cc4-4d4d-b136-df922b5bb4ef" />
+<img width="716" height="537" alt="overall-performance" src="https://github.com/user-attachments/assets/6e3f9c0f-2cc4-4d4d-b136-df922b5bb4ef" />
 
+### Per-Task Performance  
+The evolution on the “gina” task highlights a rapid improvement during the early iterations, followed by more gradual refinement.  
+This behavior shows that the optimizer quickly identifies promising regions before stabilizing around the most effective configurations.
 
-### Performance par tâche  
-L’évolution sur la tâche « gina » met en évidence une amélioration rapide durant les premières itérations, suivie d’un affinement progressif.  
-Ce comportement indique que l’optimiseur identifie rapidement des zones prometteuses avant de stabiliser la recherche autour des meilleures régions.
-
-<img width="713" height="533" alt="3b2b3fc1-cd30-4aa0-a34c-b934060af6ac" src="https://github.com/user-attachments/assets/6e155b14-adaf-4f37-a9a3-3a0bdc0ec6d0" />
-
+<img width="713" height="533" alt="gina-performance" src="https://github.com/user-attachments/assets/6e155b14-adaf-4f37-a9a3-3a0bdc0ec6d0" />
 
 ---
 
 ## Conclusion
-Les expérimentations montrent que la maîtrise de la variance prédite par le modèle joue un rôle déterminant dans la stabilité de l’optimisation.  
-Le seuil minimal de variance apparaît comme un mécanisme efficace pour éviter la sur-confiance du modèle et maintenir une exploration utile, ce qui se traduit par les meilleurs résultats obtenus dans ce projet.  
-À l’inverse, l’exploration adaptative s’est révélée moins performante dans ce contexte précis, probablement en raison d’ajustements trop agressifs du niveau d’exploration.
+The experiments demonstrate that controlling the predicted variance of the model plays a key role in the stability of black-box optimization.  
+The minimum variance threshold proved to be an effective mechanism to prevent overconfidence and sustain meaningful exploration, leading to the best results in this project.  
+Conversely, adaptive exploration was less suited to this context, likely due to overly aggressive adjustments of the exploration level.
 
 ---
 
-## Implémentations incluses
-- Optimiseur GPR : `optimizer_GPR.py`  
-- Optimiseur GPR avec exploration adaptative : `optimizer_GPR_adaptive.py`  
-- Optimiseur GPR avec seuil de variance : `optimizer_GPR_threshold.py`
-
-
+## Included Implementations
+- GPR Optimizer: `optimizer_GPR.py`  
+- Adaptive Exploration GPR Optimizer: `optimizer_GPR_adaptive.py`  
+- Variance Threshold GPR Optimizer: `optimizer_GPR_threshold.py`
