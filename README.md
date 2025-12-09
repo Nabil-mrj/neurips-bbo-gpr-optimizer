@@ -58,7 +58,7 @@ Conversely, adaptive exploration was less suited to this context, likely due to 
 
 ---
 
-## Included Implementations
-- GPR Optimizer: `optimizer_GPR.py`  
-- Adaptive Exploration GPR Optimizer: `optimizer_GPR_adaptive.py`  
-- Variance Threshold GPR Optimizer: `optimizer_GPR_threshold.py`
+## Included implementations
+- GPR optimizer: `optimizer_GPR.py`  
+- Adaptive exploration GPR optimizer: `optimizer_GPR_adaptive.py`  
+- Variance threshold GPR optimizer: `optimizer_GPR_threshold.py`
