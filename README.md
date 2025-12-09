@@ -1,4 +1,4 @@
-# Black-Box Optimization with Gaussian Processes  
+# Black-Box optimization with gaussian processes  
 Project carried out as part of the NeurIPS 2020 BBO Post-Challenge
 
 ## Overview
@@ -9,7 +9,7 @@ Several variants of Gaussian Process Regression (GPR)–based optimizers were im
 
 ---
 
-## Developed Methods
+## Developed methods
 
 ### 1. Gaussian Process Regression (GPR) – Baseline  
 **Submission ID: 893732 — Score: 91.28**
@@ -18,14 +18,14 @@ This baseline relies on a Gaussian Process model combined with an Expected Impro
 Hyperparameters are transformed depending on their type (categorical, boolean, integer, real, optionally log-scaled).  
 The optimizer begins with an exploration phase before progressively focusing on the most promising regions based on accumulated observations.
 
-### 2. GPR with Adaptive Exploration  
+### 2. GPR with adaptive exploration  
 **Submission ID: 893739 — Score: 83.24**
 
 This variant adjusts the exploration intensity according to the variance of recent observations.  
 Low variance is interpreted as a sign of stagnation and increases exploration, while higher variance reduces it to concentrate on promising areas.  
 In this challenge setting, this strategy did not improve performance and tended to cause excessive exploration.
 
-### 3. GPR with Minimum Variance Threshold  
+### 3. GPR with minimum variance threshold  
 **Submission ID: 893749 — Score: 92.65**
 
 This approach introduces a minimum variance threshold in the acquisition computation.  
@@ -37,13 +37,13 @@ This method achieved the best performance among the implemented variants.
 
 ## Results
 
-### Overall Performance  
+### Overall performance  
 The model incorporating a minimum variance threshold shows a steady improvement of the mean score across iterations until it reaches a stable, high-performance plateau.  
 This trend reflects a well-balanced trade-off between exploration and exploitation across the benchmark.
 
 <img width="716" height="537" alt="overall-performance" src="https://github.com/user-attachments/assets/6e3f9c0f-2cc4-4d4d-b136-df922b5bb4ef" />
 
-### Per-Task Performance  
+### Per-task performance  
 The evolution on the “gina” task highlights a rapid improvement during the early iterations, followed by more gradual refinement.  
 This behavior shows that the optimizer quickly identifies promising regions before stabilizing around the most effective configurations.
 
